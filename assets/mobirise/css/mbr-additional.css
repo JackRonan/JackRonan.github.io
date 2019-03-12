@@ -2302,8 +2302,31 @@ body {
 .cid-refFXPj1ji .dropdown-item:hover {
   color: #c1c1c1 !important;
 }
-.cid-rbk4nfrwJg {
+.cid-rkwYly7TUD {
   background-image: url("../../../assets/images/47385890-2248105341886872-3531063231617433600-o-2000x1333.jpg");
+}
+.cid-rkwYly7TUD .icons-media-container {
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding-top: 4rem;
+}
+.cid-rkwYly7TUD .icons-media-container .mbr-iconfont {
+  font-size: 96px;
+  color: #ffffff;
+}
+.cid-rkwYly7TUD .icons-media-container .icon-block {
+  padding-bottom: 1rem;
+}
+.cid-rkwYly7TUD .mbr-text {
+  color: #ffffff;
+}
+.cid-rkwYly7TUD .card {
+  padding-bottom: 1.5rem;
 }
 .cid-rbjWcqztRK {
   padding-top: 30px;
