@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Image Filters</title>
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box; /* Prevent layout overflow */
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        canvas {
+            width: 100%;
+            height: auto;
+            max-width: 100%; /* Fit canvas in mobile view */
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .controls-container {
+            max-width: 100%; /* Ensure controls fit on smaller screens */
+            overflow-y: auto;
+        }
+
+        .slider-container {
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                align-items: center;
+            }
+
+            canvas {
+                margin-top: 10px;
+            }
+
+            .controls-container {
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Filters</h1>
+    <div class="main-container">
+        <div class="content">
+            <canvas id="canvas" width="720" height="469"></canvas>
+
+            <div class="controls-container">
+                <label class="upload-label">
+                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                </label>
+                <button id="uploadButton">Select Image</button>
+                <button id="resetButton">Reset</button>
+                <button id="downloadButton">Download Filter</button>
+                <br><br>
+
+                <!-- Sliders -->
+                <div class="slider-container">
+                    <label>Brightness: <span id="brightnessValue">0</span>
+                        <input type="range" id="brightness" min="-255" max="255" value="0">
+                    </label>
+                </div>
+                <div class="slider-container">
+                    <label>Contrast: <span id="contrastValue">1.0</span>
+                        <input type="range" id="contrast" min="0.0" max="2.0" step="0.01" value="1">
+                    </label>
+                </div>
+                <div class="slider-container">
+                    <label>Saturation: <span id="saturationValue">1.0</span>
+                        <input type="range" id="saturation" min="0.0" max="4.0" step="0.01" value="1">
+                    </label>
+                </div>
+                <div class="slider-container">
+                    <label>Hue: <span id="hueValue">0</span>
+                        <input type="range" id="hue" min="0" max="360" value="0">
+                    </label>
+                </div>
+                <div class="slider-container">
+                    <label>Gamma Red: <span id="gammaRValue">1.0</span>
+                        <input type="range" id="gammaR" min="0.1" max="2.0" step="0.01" value="1">
+                    </label>
+                </div>
+                <div class="slider-container">
+                    <label>Gamma Green: <span id="gammaGValue">1.0</span>
+                        <input type="range" id="gammaG" min="0.1" max="2.0" step="0.01" value="1">
+                    </label>
+                </div>
+                <div class="slider-container">
+                    <label>Gamma Blue: <span id="gammaBValue">1.0</span>
+                        <input type="range" id="gammaB" min="0.1" max="2.0" step="0.01" value="1">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const imageUpload = document.getElementById('imageUpload');
+        const uploadButton = document.getElementById('uploadButton');
+        const resetButton = document.getElementById('resetButton');
+        const downloadButton = document.getElementById('downloadButton');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let img = new Image(); // Placeholder for the uploaded image
+
+        // Event listener for the "Select Image" button
+        uploadButton.addEventListener('click', () => {
+            imageUpload.click();
+        });
+
+        // Handle image upload and display on the canvas
+        imageUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) {
+                alert('No file selected!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result;
+                img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    applyFilters(); // Draw image with filters applied
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Get filter sliders and display values
+        const sliders = {
+            brightness: document.getElementById('brightness'),
+            contrast: document.getElementById('contrast'),
+            saturation: document.getElementById('saturation'),
+            hue: document.getElementById('hue'),
+            gammaR: document.getElementById('gammaR'),
+            gammaG: document.getElementById('gammaG'),
+            gammaB: document.getElementById('gammaB'),
+        };
+
+        const values = {
+            brightness: document.getElementById('brightnessValue'),
+            contrast: document.getElementById('contrastValue'),
+            saturation: document.getElementById('saturationValue'),
+            hue: document.getElementById('hueValue'),
+            gammaR: document.getElementById('gammaRValue'),
+            gammaG: document.getElementById('gammaGValue'),
+            gammaB: document.getElementById('gammaBValue'),
+        };
+
+        const defaultValues = {
+            brightness: 0,
+            contrast: 1.0,
+            saturation: 1.0,
+            hue: 0,
+            gammaR: 1.0,
+            gammaG: 1.0,
+            gammaB: 1.0,
+        };
+
+        // Reset button logic
+        resetButton.addEventListener('click', () => {
+            Object.keys(sliders).forEach(key => {
+                sliders[key].value = defaultValues[key];
+                values[key].textContent = defaultValues[key];
+            });
+            applyFilters();
+        });
+
+        // Update displayed slider values and reapply filters
+        Object.keys(sliders).forEach(key => {
+            sliders[key].addEventListener('input', () => {
+                values[key].textContent = sliders[key].value;
+                applyFilters();
+            });
+        });
+
+        // Apply filters and redraw the image
+        function applyFilters() {
+            if (!img.src) return; // Skip if no image is loaded
+
+            ctx.filter = `
+                brightness(${parseInt(sliders.brightness.value) + 100}%)
+                contrast(${sliders.contrast.value})
+                saturate(${sliders.saturation.value})
+                hue-rotate(${sliders.hue.value}deg)
+            `;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // Apply gamma corrections manually
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            const gammaRFactor = 1 / sliders.gammaR.value;
+            const gammaGFactor = 1 / sliders.gammaG.value;
+            const gammaBFactor = 1 / sliders.gammaB.value;
+
+            for (let i = 0; i < data.length; i += 4) {
+                data[i] = 255 * Math.pow(data[i] / 255, gammaRFactor); // Red
+                data[i + 1] = 255 * Math.pow(data[i + 1] / 255, gammaGFactor); // Green
+                data[i + 2] = 255 * Math.pow(data[i + 2] / 255, gammaBFactor); // Blue
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        // Download current filter settings as an .ftl file
+        downloadButton.addEventListener('click', () => {
+            const filterSettings = {
+                brightness: sliders.brightness.value,
+                contrast: sliders.contrast.value,
+                saturation: sliders.saturation.value,
+                hue: sliders.hue.value,
+                gammaR: sliders.gammaR.value,
+                gammaG: sliders.gammaG.value,
+                gammaB: sliders.gammaB.value,
+            };
+
+            const blob = new Blob([JSON.stringify(filterSettings, null, 2)], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Custom-Filter.ftl';
+            link.click();
+        });
+    </script>
+</body>
+</html>

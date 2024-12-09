@@ -1,0 +1,251 @@
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+} */
+
+
+
+/* Main container, using Flex layout */
+.main-container {
+    display: flex;
+    height: calc(100vh - 100px); /* Subtract the height of the header and file upload */
+}
+
+/* Left sidebar style */
+.sidebar {
+    width: 300px;
+    background-color: #fff;
+    padding: 20px;
+    overflow-y: auto; /* Show scroll bar when content exceeds */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Right content area style */
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto; /* Show scroll bar when content exceeds */
+}
+
+/* Adjust h1 and file upload style */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#imageUpload {
+    display: block;
+    margin: 20px auto;
+}
+
+/* Control area style */
+.slider-container {
+    margin-bottom: 15px;
+}
+
+/* Adjust slider label */
+.slider-container label {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Adjust slider */
+.slider-container input[type="range"] {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+/* Display slider value */
+.slider-container span {
+    font-size: 14px;
+}
+
+/* Slider beautification */
+input[type="range"] {
+    -webkit-appearance: none;
+    height: 6px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    opacity: 0.8;
+    transition: opacity .2s;
+    margin: 0;
+}
+
+input[type="range"]:disabled {
+    background: #e0e0e0;
+    cursor: not-allowed;
+}
+
+/* Add these styles to your CSS */
+.slider-thumb-blue::-webkit-slider-thumb {
+    background-color: #007bff; /* Blue */
+}
+
+.slider-thumb-gray::-webkit-slider-thumb {
+    background-color: #a0a0a0; /* Gray */
+}
+
+input[type="range"]:disabled::-webkit-slider-thumb {
+    background: #a0a0a0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+    transition: background-color .3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: #0056b3;
+}
+
+input[type="range"]:hover {
+    opacity: 1;
+}
+
+/* Single selection button container */
+.radio-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+/* Adjust single selection button label */
+.radio-container label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Adjust single selection button */
+.radio-container input[type="radio"] {
+    margin-right: 5px;
+}
+
+/* Button beautification */
+button {
+    font-size: 14px;
+    padding: 8px 16px;
+    margin: 10px 5px 0 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color .3s ease, transform .1s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* #imageUpload {
+    font-size: 14px;
+    padding: 8px 16px;
+    margin: 10px 5px 0 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color .3s ease, transform .1s ease;
+}
+
+#imageUpload:hover {
+    background-color: #0056b3;
+}
+
+#imageUpload:active {
+    transform: scale(0.98);
+} */
+
+body .upload-label {
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem;
+    font-family: sans-serif;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    display: flex; /* Added to enable flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 95%; /* Set width to 150px */
+    height: 15px; /* Set height to 15px */
+}
+
+/* Canvas border and shadow */
+canvas {
+    border: 1px solid #ccc;
+    max-width: 100%;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table container and table style */
+.table-container {
+    overflow-x: auto;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.matrix-table caption {
+    font-weight: bold;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #e9ecef;
+    text-align: center;
+}
+
+.matrix-table th,
+.matrix-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+.matrix-table tbody tr td:first-child {
+    font-weight: bold;
+}
+
+/* Adjust table display for different screen widths */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+    }
+
+    .content {
+        width: 100%;
+        height: auto;
+    }
+}
